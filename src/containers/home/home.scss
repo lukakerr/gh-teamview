@@ -11,12 +11,16 @@
   margin: 8px;
 }
 
+.title {
+  word-break: break-word;
+  min-width: 200px;
+}
+
 .column {
   display: flex;
   flex-direction: column;
   flex: 1;
   row-gap: 8px;
-  min-width: 200px;
 }
 
 .author {
@@ -38,4 +42,27 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.actionSection {
+  display: flex;
+  column-gap: 4px;
+}
+
+.actionSection:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.actionSection:last-child {
+  align-self: flex-end;
+}
+
+.timeAgo {
+  font-size: 12px;
 }

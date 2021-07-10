@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
 import { Avatar, Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 
 import { getLanes, setToken } from 'actions';
 import { Action, State, Lane, Pull, Label } from 'types';
 
 import * as styles from './home.scss';
+
+TimeAgo.addDefaultLocale(en);
+const timeAgo = new TimeAgo('en-AU');
 
 // 5 minutes
 const FETCH_INTERVAL = 1000 * 60 * 5;
@@ -92,21 +97,28 @@ class Home extends React.Component<HomeProps, {}> {
                 <a href={pull.url} className={styles.link} key={pull.url}>
                   <Card>
                     <CardContent>
-                      <Typography>{pull.title}</Typography>
+                      <Typography variant='subtitle2' className={styles.title}>{pull.title}</Typography>
                     </CardContent>
                     <CardActions>
-                      {pull.labels.map((label: Label) => {
-                        const isDark = this.getColorContrast(label.color) === 'dark';
+                      <div className={styles.actions}>
+                        <div className={styles.actionSection}>
+                          {pull.labels.map((label: Label) => {
+                            const isDark = this.getColorContrast(label.color) === 'dark';
 
-                        return (
-                          <div key={label.name} className={styles.label} style={{
-                            color: isDark ? '#EEE' : '#505050',
-                            backgroundColor: `#${label.color}`,
-                          }}>
-                            {label.name}
-                          </div>
-                        );
-                      })}
+                            return (
+                              <div key={label.name} className={styles.label} style={{
+                                color: isDark ? '#EEE' : '#505050',
+                                backgroundColor: `#${label.color}`,
+                              }}>
+                                {label.name}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className={styles.actionSection}>
+                          <Typography variant='caption'>{timeAgo.format(new Date(pull.created_at))}</Typography>
+                        </div>
+                      </div>
                     </CardActions>
                   </Card>
                 </a>
