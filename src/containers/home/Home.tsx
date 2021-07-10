@@ -29,15 +29,23 @@ class Home extends React.Component<HomeProps, {}> {
   private interval: number;
 
   componentDidMount() {
+    if (!this.props.lanes || !this.props.stats) {
+      this.getLanes();
+    }
+
     this.interval = window.setInterval(() => {
-      if (this.props.hasToken) {
-        this.props.getLanes();
-      }
+      this.getLanes();
     }, FETCH_INTERVAL);
   }
 
   componentWillUnmount() {
     window.clearInterval(this.interval);
+  }
+
+  getLanes() {
+    if (this.props.hasToken) {
+      this.props.getLanes();
+    }
   }
 
   getColorContrast = (color: string): 'dark' | 'light' => {
