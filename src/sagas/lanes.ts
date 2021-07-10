@@ -18,9 +18,6 @@ const endpoints = {
 
 const getToken = (state: State) => state.token;
 
-/**
- * Watcher for the GET_GAMES/TRIGGER action
- */
 export function* getLanesWatcher() {
   yield takeEvery(getLanes.TRIGGER, getLanesSaga);
 }
@@ -81,6 +78,7 @@ export function* getLanesSaga(action: Action): any {
       return {
         member: {
           login: member.login,
+          html_url: member.html_url,
           avatar_url: member.avatar_url,
         },
         pulls: pullsForMember,

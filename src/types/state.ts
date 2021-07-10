@@ -1,5 +1,6 @@
 export type Member = {
   login: string,
+  html_url: string,
   avatar_url: string,
 };
 
@@ -21,12 +22,20 @@ export type Lane = {
   pulls: Pull[],
 };
 
+export type Stats = {
+  totalMembers: number,
+  totalPullRequests: number,
+  totalReviewRequests: number,
+};
+
 /**
  * An interface representing our entire redux store state tree
  */
 export interface State {
   // List of swimlanes for each user
   lanes?: Lane[],
+  // Statistics for team
+  stats?: Stats,
   // Auth token
   token?: string,
   // Possible error

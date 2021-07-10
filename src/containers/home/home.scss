@@ -4,15 +4,34 @@
   font-size: 2rem;
 }
 
-.root {
+.container {
   display: flex;
-  flex-direction: row;
-  column-gap: 8px;
+  flex-direction: column;
+  row-gap: 32px;
   margin: 8px;
 }
 
+.stats {
+  display: flex;
+  flex-direction: row;
+  column-gap: 64px;
+  justify-content: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lanes {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
 @media only screen and (max-width: 600px) {
-  .root {
+  .container, .lanes, .stats {
     flex-wrap: wrap;
   }
 }
@@ -41,6 +60,7 @@
 
 .link {
   text-decoration: none;
+  color: unset;
 }
 
 .label {
