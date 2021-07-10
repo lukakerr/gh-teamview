@@ -96,7 +96,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'canva-teamview'
+      title: 'canva-teamview',
+      meta: {
+        viewport: 'width=device-width, initial-scale=1.0',
+      },
     }),
     new webpack.HotModuleReplacementPlugin()
   ]

@@ -94,7 +94,7 @@ class Home extends React.Component<HomeProps, {}> {
                 <Typography variant="h5">{lane.member.login}</Typography>
               </div>
               {lane.pulls.map((pull: Pull) => (
-                <a href={pull.url} className={styles.link} key={pull.url}>
+                <a href={pull.url} className={styles.link} key={pull.url} target='_blank' rel='noopener'>
                   <Card>
                     <CardContent>
                       <Typography variant='subtitle2' className={styles.title}>{pull.title}</Typography>
