@@ -5,9 +5,10 @@ import {
   select,
   takeEvery,
 } from 'redux-saga/effects';
+import { uniqBy } from 'lodash';
 
-import { Action, State, Lane } from 'types';
-import { getStats, getLanes } from 'actions';
+import { Action, State, Lane, Review } from 'types';
+import { getStats, getLanes, getReviews } from 'actions';
 
 import * as config from 'config/default.json';
 
@@ -33,7 +34,7 @@ export function* getStatsSaga(action: Action): any {
   headers.set('Authorization', 'Basic ' + btoa(config.auth.username + ":" + token));
 
   try {
-    let reviewsRequested = 0;
+    const reviewsMap: { [key: string]: Review } = {};
 
     for (const member of members) {
       const reviewsRequestedResponse = yield call(fetch, endpoints.reviewsRequested(member.login), {
@@ -48,15 +49,33 @@ export function* getStatsSaga(action: Action): any {
         return;
       }
 
-      reviewsRequested += reviewsRequestedJson.total_count;
+      reviewsRequestedJson.items.forEach((item: any) => {
+        if (reviewsMap[item.html_url]) {
+          reviewsMap[item.html_url].requested.push(member);
+        } else {
+          reviewsMap[item.html_url] = {
+            url: item.html_url,
+            title: item.title,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            labels: item.labels,
+            requested: [member],
+          };
+        }
+      });
     }
+
+    const dedupedReviews = Object.values(reviewsMap)
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    yield put(getReviews.success(dedupedReviews));
 
     const pullRequests = yield select(getPullRequests);
 
     const stats = {
       totalMembers: members.length,
       totalPullRequests: pullRequests,
-      totalReviewRequests: reviewsRequested,
+      totalReviewRequests: dedupedReviews.length,
     };
 
     yield put(getStats.success(stats));

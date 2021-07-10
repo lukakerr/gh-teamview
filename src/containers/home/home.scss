@@ -1,3 +1,5 @@
+@import 'assets/colors';
+
 .loadingContainer {
   margin: 200px auto;
   text-align: center;
@@ -9,6 +11,12 @@
   flex-direction: column;
   row-gap: 32px;
   margin: 8px;
+}
+
+.mode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stats {
@@ -34,6 +42,55 @@
   .container, .lanes, .stats {
     flex-wrap: wrap;
   }
+}
+
+.reviewRequests {
+  max-width: 600px;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.reviews {
+  background-color: $white;
+  padding: 0;
+}
+
+.reviews .link {
+  flex: calc(25% - 24px);
+}
+
+.listAvatarContainer {
+  min-width: 36px !important;
+}
+
+.pending {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $orange;
+  display: inline-block;
+  margin: 0 8px 0 0;
+}
+
+.listRightInfo {
+  display: flex;
+  flex-direction: column;
+  max-width: 100px;
+  min-width: 100px;
+  row-gap: 8px;
+}
+
+.listRightInfoSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.listAvatar {
+  width: 24px !important;
+  height: 24px !important;
 }
 
 .title {

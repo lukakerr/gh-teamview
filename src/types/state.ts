@@ -17,6 +17,10 @@ export type Pull = {
   labels: Label[],
 };
 
+export type Review = Pull & {
+  requested: Member[],
+};
+
 export type Lane = {
   member: Member,
   pulls: Pull[],
@@ -28,12 +32,17 @@ export type Stats = {
   totalReviewRequests: number,
 };
 
+export type Mode = 'team' | 'reviews';
+
 /**
  * An interface representing our entire redux store state tree
  */
 export interface State {
+  mode: Mode,
   // List of swimlanes for each user
   lanes?: Lane[],
+  // List of PRs that have requested reviews
+  reviews?: Review[],
   // Statistics for team
   stats?: Stats,
   // Auth token
