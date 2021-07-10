@@ -1,0 +1,9 @@
+{
+  "api": "https://api.github.com",
+  "auth": {
+    "username": "lukakerr"
+  },
+  "org": "canva",
+  "repo": "canva",
+  "team": "editing"
+}

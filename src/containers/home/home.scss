@@ -1,0 +1,40 @@
+.loadingContainer {
+  margin: 200px auto;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.root {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  row-gap: 8px;
+  min-width: 200px;
+}
+
+.author {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+  padding: 8px;
+  white-space: nowrap;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.label {
+  padding: 0 8px;
+  border-radius: 2em;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
