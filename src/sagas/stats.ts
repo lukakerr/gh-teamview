@@ -4,8 +4,8 @@ import {
   call,
   select,
   takeEvery,
+  delay,
 } from 'redux-saga/effects';
-import { uniqBy } from 'lodash';
 
 import { Action, State, Lane, Review } from 'types';
 import { getStats, getLanes, getReviews } from 'actions';
@@ -16,9 +16,13 @@ const endpoints = {
   reviewsRequested: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:open review-requested:${author}`,
 };
 
+// How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
+// https://docs.github.com/en/rest/reference/search#rate-limit
+const THROTTLE = 3000;
+
 const getToken = (state: State) => state.token;
-const getMembers = (state: State) => state.lanes.map((l: Lane) => l.member);
-const getPullRequests = (state: State) => state.lanes.reduce((acc, curr) => acc + curr.pulls.length, 0);
+const getMembers = (state: State) => (state.lanes || []).map((l: Lane) => l.member);
+const getPullRequests = (state: State) => (state.lanes || []).reduce((acc, curr) => acc + curr.pulls.length, 0);
 
 export function* getStatsWatcher() {
   yield takeEvery(getLanes.FULFILL, getStatsSaga);
@@ -37,6 +41,7 @@ export function* getStatsSaga(action: Action): any {
     const reviewsMap: { [key: string]: Review } = {};
 
     for (const member of members) {
+      yield delay(THROTTLE);
       const reviewsRequestedResponse = yield call(fetch, endpoints.reviewsRequested(member.login), {
         method: 'GET',
         headers,
@@ -45,8 +50,8 @@ export function* getStatsSaga(action: Action): any {
       const reviewsRequestedJson = yield call([reviewsRequestedResponse, reviewsRequestedResponse.json]);
 
       if (reviewsRequestedResponse.status < 200 || reviewsRequestedResponse.status >= 300) {
-        yield put(getStats.failure(new Error('Could not get response from Github')));
-        return;
+        console.error(new Error('Could not get response from Github'));
+        continue;
       }
 
       reviewsRequestedJson.items.forEach((item: any) => {

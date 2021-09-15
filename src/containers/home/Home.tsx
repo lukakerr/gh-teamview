@@ -46,12 +46,7 @@ class Home extends React.Component<HomeProps, {}> {
   private interval: number;
 
   componentDidMount() {
-    const { lanes, stats, reviews } = this.props;
-
-    if (!lanes || !stats || !reviews) {
-      this.getLanes();
-    }
-
+    this.getLanes();
     this.interval = window.setInterval(() => {
       this.getLanes();
     }, FETCH_INTERVAL);
@@ -161,10 +156,10 @@ class Home extends React.Component<HomeProps, {}> {
                   </ListItemAvatar>
                   <ListItemText
                     primary={reviewRequest.title}
-                    secondary={<div>
+                    secondary={<span>
                       <span className={styles.pending}></span>
                       {reviewRequest.requested.map(r => `@${r.login}`).join(', ')}
-                    </div>}
+                    </span>}
                   />
                   <div className={styles.listRightInfo}>
                     <div className={styles.listRightInfoSection}>
@@ -206,12 +201,6 @@ class Home extends React.Component<HomeProps, {}> {
       </div>
     }
 
-    if (error) {
-      return <div className={styles.loadingContainer}>
-        <p>{error.message}</p>
-      </div>
-    }
-
     if (isLoading) {
       return <div className={styles.loadingContainer}>
         <p>Loading...</p>
@@ -226,6 +215,7 @@ class Home extends React.Component<HomeProps, {}> {
 
     return (
       <div className={styles.container}>
+        {error && <p>{error.message}</p>}
         <div className={styles.mode}>
           <Typography variant='h6'>View: {mode}</Typography>
           <Switch checked={mode === 'reviews'} onChange={this.onModeChange} />

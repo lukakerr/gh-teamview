@@ -39,13 +39,12 @@ export function* getLanesSaga(action: Action): any {
     const membersJson = yield call([membersResponse, membersResponse.json]);
 
     if (membersResponse.status < 200 || membersResponse.status >= 300) {
-      yield put(getLanes.failure(new Error('Could not get response from Github')));
-      return;
+      console.error(new Error('Could not get response from Github'));
     }
 
     const pulls: any[] = [];
 
-    for (const member of membersJson) {
+    for (const member of (membersJson || [])) {
       const pullsResponse = yield call(fetch, endpoints.pulls(member.login), {
         method: 'GET',
         headers,
@@ -54,8 +53,7 @@ export function* getLanesSaga(action: Action): any {
       const pullsJson = yield call([pullsResponse, pullsResponse.json]);
 
       if (pullsResponse.status < 200 || pullsResponse.status >= 300) {
-        yield put(getLanes.failure(new Error('Could not get response from Github')));
-        return;
+        console.error(new Error('Could not get response from Github'));
       }
 
       pulls.push(...pullsJson.items);
