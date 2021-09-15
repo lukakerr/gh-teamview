@@ -18,17 +18,19 @@ const endpoints = {
 
 // How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
 // https://docs.github.com/en/rest/reference/search#rate-limit
-const THROTTLE = 3000;
+const SEARCH_THROTTLE = 3000;
 
 const getToken = (state: State) => state.token;
-const getMembers = (state: State) => (state.lanes || []).map((l: Lane) => l.member);
-const getPullRequests = (state: State) => (state.lanes || []).reduce((acc, curr) => acc + curr.pulls.length, 0);
+const getMembers = (state: State) => (state.lanes.data || []).map((l: Lane) => l.member);
+const getPullRequests = (state: State) => (state.lanes.data || []).reduce((acc, curr) => acc + curr.pulls.length, 0);
 
 export function* getStatsWatcher() {
   yield takeEvery(getLanes.FULFILL, getStatsSaga);
 }
 
 export function* getStatsSaga(action: Action): any {
+  yield put(getStats.trigger());
+  yield put(getReviews.trigger());
   yield put(getStats.request(action.payload));
 
   const token = yield select(getToken);
@@ -41,7 +43,7 @@ export function* getStatsSaga(action: Action): any {
     const reviewsMap: { [key: string]: Review } = {};
 
     for (const member of members) {
-      yield delay(THROTTLE);
+      yield delay(SEARCH_THROTTLE);
       const reviewsRequestedResponse = yield call(fetch, endpoints.reviewsRequested(member.login), {
         method: 'GET',
         headers,

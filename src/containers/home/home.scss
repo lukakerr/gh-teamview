@@ -83,9 +83,11 @@
 }
 
 .listRightInfoSection {
+  row-gap: 4px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .listAvatar {
@@ -126,6 +128,7 @@
   font-size: 12px;
   line-height: 18px;
   font-weight: 500;
+  width: fit-content;
 }
 
 .actions {

@@ -40,11 +40,20 @@ export type Mode = 'team' | 'reviews';
 export interface State {
   mode: Mode,
   // List of swimlanes for each user
-  lanes?: Lane[],
+  lanes: {
+    data: Lane[],
+    loading: boolean,
+  },
   // List of PRs that have requested reviews
-  reviews?: Review[],
+  reviews: {
+    data: Review[],
+    loading: boolean,
+  },
   // Statistics for team
-  stats?: Stats,
+  stats: {
+    data?: Stats,
+    loading: boolean,
+  },
   // Auth token
   token?: string,
   // Possible error

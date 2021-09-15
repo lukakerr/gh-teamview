@@ -4,6 +4,7 @@ import {
   call,
   select,
   takeEvery,
+  delay,
 } from 'redux-saga/effects';
 
 import { Action, Member, State } from 'types';
@@ -15,6 +16,10 @@ const endpoints = {
   teamMembers: () => `${config.api}/orgs/${config.org}/teams/${config.team}/members`,
   pulls: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:open author:${author}`,
 };
+
+// How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
+// https://docs.github.com/en/rest/reference/search#rate-limit
+const SEARCH_THROTTLE = 3000;
 
 const getToken = (state: State) => state.token;
 
@@ -45,6 +50,7 @@ export function* getLanesSaga(action: Action): any {
     const pulls: any[] = [];
 
     for (const member of (membersJson || [])) {
+      yield delay(SEARCH_THROTTLE);
       const pullsResponse = yield call(fetch, endpoints.pulls(member.login), {
         method: 'GET',
         headers,

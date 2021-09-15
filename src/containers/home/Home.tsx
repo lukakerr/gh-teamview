@@ -193,7 +193,7 @@ class Home extends React.Component<HomeProps, {}> {
   }
 
   render() {
-    const { lanes, stats, mode, error, hasToken, isLoading } = this.props;
+    const { lanes, reviews, stats, mode, error, hasToken, isLoading } = this.props;
 
     if (!hasToken) {
       return <div className={styles.loadingContainer}>
@@ -201,7 +201,8 @@ class Home extends React.Component<HomeProps, {}> {
       </div>
     }
 
-    if (isLoading) {
+    // First load
+    if (isLoading && (lanes.length === 0 || reviews.length === 0 || stats == null)) {
       return <div className={styles.loadingContainer}>
         <p>Loading...</p>
       </div>
@@ -216,6 +217,7 @@ class Home extends React.Component<HomeProps, {}> {
     return (
       <div className={styles.container}>
         {error && <p>{error.message}</p>}
+        {isLoading && <p>...loading more results</p>}
         <div className={styles.mode}>
           <Typography variant='h6'>View: {mode}</Typography>
           <Switch checked={mode === 'reviews'} onChange={this.onModeChange} />
@@ -251,11 +253,11 @@ const mapDispatchToProps = (dispatch: React.Dispatch<Action>) => {
 
 const mapStateToProps = (state: State) => ({
   mode: state.mode,
-  lanes: state.lanes,
-  reviews: state.reviews,
-  stats: state.stats,
+  lanes: state.lanes.data,
+  reviews: state.reviews.data,
+  stats: state.stats.data,
   hasToken: !!state.token,
-  isLoading: state.lanes == null || state.stats == null || state.reviews == null,
+  isLoading: state.lanes.loading || state.reviews.loading || state.stats.loading,
   error: state.error,
 });
 
