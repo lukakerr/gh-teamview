@@ -202,13 +202,13 @@ class Home extends React.Component<HomeProps, {}> {
     }
 
     // First load
-    if (isLoading && (lanes.length === 0 || reviews.length === 0 || stats == null)) {
+    if (isLoading && (lanes.length === 0 || (reviews.length === 0 && stats == null))) {
       return <div className={styles.loadingContainer}>
         <p>Loading...</p>
       </div>
     }
 
-    if (lanes.length === 0) {
+    if (lanes.length === 0 || reviews.length === 0 || stats == null) {
       return <div className={styles.loadingContainer}>
         <p>No results</p>
       </div>
