@@ -26,8 +26,8 @@ import * as styles from './home.scss';
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo('en-AU');
 
-// 5 minutes
-const FETCH_INTERVAL = 1000 * 60 * 5;
+// 15 minutes
+const FETCH_INTERVAL = 1000 * 60 * 15;
 
 type HomeProps = {
   mode: Mode,
