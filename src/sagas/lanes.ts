@@ -68,7 +68,7 @@ export function* getLanesSaga(action: Action): any {
       pulls.push(...pullsJson.items);
     }
 
-    const lanes = members.map((member: Member) => {
+    const lanes = dedupedMembers.map((member: Member) => {
       const pullsForMember = pulls
           .filter((pull: any) => pull.user.login === member.login)
           .map((pull: any) => ({
