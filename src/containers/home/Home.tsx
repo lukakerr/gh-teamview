@@ -26,8 +26,8 @@ import * as styles from './home.scss';
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo('en-AU');
 
-// 20 minutes
-const FETCH_INTERVAL = 1000 * 60 * 20;
+// 5 minutes
+const FETCH_INTERVAL = 1000 * 60 * 5;
 
 type HomeProps = {
   mode: Mode,
@@ -225,7 +225,7 @@ class Home extends React.Component<HomeProps, {}> {
           <Typography variant='h6'>View: {mode}</Typography>
           <Switch checked={mode === 'reviews'} onChange={this.onModeChange} />
         </div>}
-        {(stats != null && !statsLoading) && <div className={styles.stats}>
+        {stats != null && <div className={styles.stats}>
           <div className={styles.stat}>
             <Typography variant='h4'>{stats.totalMembers}</Typography>
             <Typography variant='h6'>Team members</Typography>
