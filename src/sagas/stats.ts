@@ -18,7 +18,7 @@ const endpoints = {
 
 // How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
 // https://docs.github.com/en/rest/reference/search#rate-limit
-const SEARCH_THROTTLE = 3000;
+const SEARCH_THROTTLE = 2500;
 
 const getToken = (state: State) => state.token;
 const getMembers = (state: State) => (state.lanes.data || []).map((l: Lane) => l.member);

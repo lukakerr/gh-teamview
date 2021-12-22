@@ -26,8 +26,8 @@ import * as styles from './home.scss';
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo('en-AU');
 
-// 5 minutes
-const FETCH_INTERVAL = 1000 * 60 * 5;
+// 20 minutes
+const FETCH_INTERVAL = 1000 * 60 * 20;
 
 type HomeProps = {
   mode: Mode,
@@ -37,7 +37,9 @@ type HomeProps = {
   reviews?: Pull[],
   stats?: Stats,
   hasToken: boolean,
-  isLoading: boolean,
+  lanesLoading: boolean,
+  reviewsLoading: boolean,
+  statsLoading: boolean,
   setToken: (token: string) => void,
   error?: Error,
 };
@@ -193,7 +195,8 @@ class Home extends React.Component<HomeProps, {}> {
   }
 
   render() {
-    const { lanes, reviews, stats, mode, error, hasToken, isLoading } = this.props;
+    const { lanes, reviews, stats, mode, error, hasToken } = this.props;
+    const { lanesLoading, reviewsLoading, statsLoading } = this.props;
 
     if (!hasToken) {
       return <div className={styles.loadingContainer}>
@@ -202,13 +205,13 @@ class Home extends React.Component<HomeProps, {}> {
     }
 
     // First load
-    if (isLoading && (lanes.length === 0 || (reviews.length === 0 && stats == null))) {
+    if (lanesLoading && lanes.length === 0) {
       return <div className={styles.loadingContainer}>
         <p>Loading...</p>
       </div>
     }
 
-    if (lanes.length === 0 || reviews.length === 0 || stats == null) {
+    if (lanes.length === 0) {
       return <div className={styles.loadingContainer}>
         <p>No results</p>
       </div>
@@ -217,12 +220,12 @@ class Home extends React.Component<HomeProps, {}> {
     return (
       <div className={styles.container}>
         {error && <p>{error.message}</p>}
-        {isLoading && <p>...loading more results</p>}
-        <div className={styles.mode}>
+        {(lanesLoading || reviewsLoading || statsLoading) && <p>...loading more results</p>}
+        {reviews.length > 0 && <div className={styles.mode}>
           <Typography variant='h6'>View: {mode}</Typography>
           <Switch checked={mode === 'reviews'} onChange={this.onModeChange} />
-        </div>
-        <div className={styles.stats}>
+        </div>}
+        {(stats != null && !statsLoading) && <div className={styles.stats}>
           <div className={styles.stat}>
             <Typography variant='h4'>{stats.totalMembers}</Typography>
             <Typography variant='h6'>Team members</Typography>
@@ -235,7 +238,7 @@ class Home extends React.Component<HomeProps, {}> {
             <Typography variant='h4'>{stats.totalReviewRequests}</Typography>
             <Typography variant='h6'>Total review requests</Typography>
           </div>
-        </div>
+        </div>}
         {mode === 'team' && this.renderLanes()}
         {mode === 'reviews' && this.renderReviewsRequested()}
       </div>
@@ -257,7 +260,9 @@ const mapStateToProps = (state: State) => ({
   reviews: state.reviews.data,
   stats: state.stats.data,
   hasToken: !!state.token,
-  isLoading: state.lanes.loading || state.reviews.loading || state.stats.loading,
+  lanesLoading: state.lanes.loading,
+  reviewsLoading: state.reviews.loading,
+  statsLoading: state.stats.loading,
   error: state.error,
 });
 
