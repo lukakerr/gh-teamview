@@ -9,7 +9,7 @@ module.exports = {
   },
   mode: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
   output: {
-    publicPath: '/',
+    publicPath: '/gh-teamview',
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },

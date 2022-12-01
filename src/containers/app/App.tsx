@@ -28,7 +28,7 @@ export class App extends React.Component<AppProps, {}> {
     return (
       <div className={styles.app}>
         <Switch>
-          <Route exact path='/' component={Home} />
+          <Route exact path='/gh-teamview' component={Home} />
           <Route component={Error} />
         </Switch>
       </div >
