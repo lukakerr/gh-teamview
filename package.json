@@ -5,10 +5,12 @@
   "repository": {
     "url": "https://github.com/lukakerr/canva-teamview"
   },
+  "homepage": "https://lukakerr.github.io/gh-teamview",
   "main": "dist/server.js",
   "scripts": {
+    "predeploy": "npm run build:prod",
+    "deploy": "gh-pages -d build",
     "start": "node server.js",
-    "heroku-postbuild": "npm run build:prod",
     "start:dev": "npm run build:dev && node server.js",
     "build:dev": "./node_modules/.bin/webpack --mode development",
     "build:prod": "./node_modules/.bin/webpack --mode production"
@@ -57,6 +59,7 @@
     "@material-ui/icons": "^4.9.1",
     "connect-history-api-fallback": "^1.5.0",
     "express": "^4.16.4",
+    "gh-pages": "^4.0.0",
     "javascript-time-ago": "^2.3.8",
     "lodash": "^4.17.21",
     "react": "^16.6.3",
