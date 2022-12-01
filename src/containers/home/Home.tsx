@@ -15,7 +15,7 @@ import {
   ListItemText,
   ListItemAvatar,
   Divider,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { getLanes, setToken, setMode } from 'actions';
 import { Action, State, Lane, Pull, Label, Stats, Mode, Review } from 'types';
