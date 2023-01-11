@@ -13,7 +13,7 @@ import { getStats, getLanes, getReviews } from 'actions';
 import * as config from 'config/default.json';
 
 const endpoints = {
-  reviewsRequested: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:open review-requested:${author}`,
+  reviewsRequested: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:pr is:open review-requested:${author}`,
 };
 
 // How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
@@ -52,7 +52,7 @@ export function* getStatsSaga(action: Action): any {
       const reviewsRequestedJson = yield call([reviewsRequestedResponse, reviewsRequestedResponse.json]);
 
       if (reviewsRequestedResponse.status < 200 || reviewsRequestedResponse.status >= 300) {
-        console.error(new Error('Could not get response from Github'));
+        console.error('Could not get response from Github');
         continue;
       }
 

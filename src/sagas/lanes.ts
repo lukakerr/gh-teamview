@@ -14,7 +14,7 @@ import * as config from 'config/default.json';
 
 const endpoints = {
   teamMembers: (team: string) => `${config.api}/orgs/${config.org}/teams/${team}/members?per_page=100`,
-  pulls: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:open author:${author}`,
+  pulls: (author: string) => `${config.api}/search/issues?q=repo:${config.org}/${config.repo} is:pr is:open author:${author}`,
 };
 
 // How many ms to throttle API calls to /search, as /search is rate limited to 30 requests per minute:
@@ -44,7 +44,7 @@ export function* getLanesSaga(action: Action): any {
       });
       const membersJson = yield call([membersResponse, membersResponse.json]);
       if (membersResponse.status < 200 || membersResponse.status >= 300) {
-        console.error(new Error('Could not get response from Github'));
+        console.error('Could not get response from Github');
       }
       members.push(...(membersJson || []));
     }
@@ -54,18 +54,21 @@ export function* getLanesSaga(action: Action): any {
 
     for (const member of dedupedMembers) {
       yield delay(SEARCH_THROTTLE);
-      const pullsResponse = yield call(fetch, endpoints.pulls(member.login), {
-        method: 'GET',
-        headers,
-      });
 
-      const pullsJson = yield call([pullsResponse, pullsResponse.json]);
+      try {
+        const pullsResponse = yield call(fetch, endpoints.pulls(member.login), {
+          method: 'GET',
+          headers,
+        });
 
-      if (pullsResponse.status < 200 || pullsResponse.status >= 300) {
-        console.error(new Error('Could not get response from Github'));
-      }
+        const pullsJson = yield call([pullsResponse, pullsResponse.json]);
 
-      pulls.push(...pullsJson.items);
+        if (pullsResponse.status < 200 || pullsResponse.status >= 300) {
+          console.error('Could not get response from Github');
+        }
+
+        pulls.push(...pullsJson.items);
+      } catch {}
     }
 
     const lanes = dedupedMembers.map((member: Member) => {
