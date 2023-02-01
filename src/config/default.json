@@ -5,5 +5,5 @@
   },
   "org": "Canva",
   "repo": "canva",
-  "teams": ["tables", "whiteboards", "editing", "docs", "responsive-editing"]
+  "teams": ["tables", "docs", "whiteboards", "editing-core", "editing-features", "editing-performance", "editing-surfaces"]
 }
