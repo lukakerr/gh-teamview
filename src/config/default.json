@@ -5,5 +5,5 @@
   },
   "org": "Canva",
   "repo": "canva",
-  "teams": ["sheets", "docs-for-work", "visual-docs", "editing-core", "editing-features"]
+  "teams": ["sheets", "docs", "docs-topus", "editing-core", "editing-features"]
 }
